@@ -1,6 +1,12 @@
 package com.conference.track.domain;
 
+import java.util.regex.Pattern;
+
+import com.conference.track.exception.InvalidTalkException;
+
 public class Talk {
+	
+	static final Pattern pattern = Pattern.compile(".*\\D.*");
 	
 	private String title;
 	
@@ -8,32 +14,30 @@ public class Talk {
 	
 	private String startTime;
 	
+	public Talk(String title, int length) throws InvalidTalkException{
+		if((title == null) || (title.equals("")))
+			throw new InvalidTalkException("Invalid title length");
+		if(!(pattern.matcher(title).matches()))
+			throw new InvalidTalkException("Invalid title");
+		this.title = title;
+		if(length<5)
+			throw new InvalidTalkException("Invalid talk length");
+		this.length = length;
+	}
+	
 	public String getTitle() {
 		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public int getLength() {
 		return length;
 	}
 
-	public void setLength(int length) {
-		this.length = length;
-	}
-
 	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-	
 	public String toString() {
-		
 		return title + " " + length;
 	}
 	

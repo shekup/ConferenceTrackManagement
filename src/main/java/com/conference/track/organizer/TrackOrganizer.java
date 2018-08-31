@@ -10,6 +10,15 @@ import com.conference.track.domain.Track;
 import com.conference.track.util.Constants;
 import com.conference.track.util.TimeUtil;
 
+/**
+ * Testing and debugging code that does lots of things is difficult.
+ * Write code that doesn't do lots of things. Write each function so that it does one thing and only one thing. 
+ * This makes them easy to test with a unit test 
+ * It is OK to wrap all smaller methods in one public facing method
+ * 
+ * @author abhishek
+ *
+ */
 public class TrackOrganizer {
 	
 	private TalksOrganizer organizer;

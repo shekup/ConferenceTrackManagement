@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.conference.track.domain.Talk;
 import com.conference.track.exception.InvalidTalkException;
-import com.conference.track.util.TalkUtil;
 
 public class FIFOTalksOrganizer implements TalksOrganizer{
 
@@ -16,7 +15,7 @@ public class FIFOTalksOrganizer implements TalksOrganizer{
 		
 		for(Map.Entry<String, Integer> entry: talksMap.entrySet()) {
 			if(entry.getValue()<=length) {
-				Talk talk = TalkUtil.createTalk(entry.getKey(), entry.getValue());
+				Talk talk = new Talk(entry.getKey(), entry.getValue());
 				talksList.add(talk);
 				length = length - entry.getValue();
 			}

@@ -12,6 +12,12 @@ import com.conference.track.util.Constants;
 
 import com.conference.track.exception.InvalidInputException;
 
+/**
+ * One rule-of-thumb: ask yourself "does it make sense to call this method, even if no Obj has been constructed yet?" 
+ * If so, it should definitely be static
+ * @author abhishek
+ *
+ */
 public class Parser {
 	
 	public static Map<String, Integer> talksmap = new LinkedHashMap<String, Integer>();

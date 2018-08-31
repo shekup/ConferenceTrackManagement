@@ -25,10 +25,10 @@ public class Session {
 	
 	public Session(SessionType sessionType){
 		this.sessionType = sessionType;
-		talksList = new ArrayList<Talk>();
-		length = (sessionType.endTime - sessionType.startTime)*60;
-		startTime = TimeUtil.timeConverter(sessionType.startTime);
-		endTime = TimeUtil.timeConverter(sessionType.endTime);
+		this.talksList = new ArrayList<Talk>();
+		this.length = (sessionType.endTime - sessionType.startTime)*60;
+		this.startTime = TimeUtil.timeConverter(sessionType.startTime);
+		this.endTime = TimeUtil.timeConverter(sessionType.endTime);
 	}
 	
 	public String getStartTime() {
@@ -50,34 +50,25 @@ public class Session {
 	 * @param talksList
 	 * @throws InvalidTimeException
 	 */
-	public void setTalksList(List<Talk> talksList) throws InvalidTimeException {
+	public void setTalksList(List<Talk> talksList) {
 		this.talksList = talksList;
 		int lenTalks = 0;
 		for(Talk talk: talksList) {
 			lenTalks = lenTalks + talk.getLength();
 		}
-		this.setLength(lenTalks);
-		//System.out.println("Length of session calculated is: " + lenTalks + " mins");
-		String lenTalksStr = TimeUtil.minsToHrs(lenTalks);
-		endTime = TimeUtil.addTime(lenTalksStr, sessionType.startTime);
+		alterSession(lenTalks);
+	}
+	
+	private void alterSession(int sessionLength) {
+		this.length = sessionLength;
+		String lenTalksStr = TimeUtil.minsToHrs(sessionLength);
+		this.endTime = TimeUtil.addTime(lenTalksStr, sessionType.startTime);
 	}
 
 	public int getLength() {
 		return length;
 	}
 
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-	
 	public String toString() {
 		return sessionType + " session: Start time-" + startTime + " End Time-" + endTime;  
 	}
@@ -86,16 +77,8 @@ public class Session {
 		return startDateTime;
 	}
 
-	public void setStartDateTime(Date startDateTime) {
-		this.startDateTime = startDateTime;
-	}
-
 	public Date getEndDateTime() {
 		return endDateTime;
-	}
-
-	public void setEndDateTime(Date endDateTime) {
-		this.endDateTime = endDateTime;
 	}
 
 	public SessionType getSessionType() {
