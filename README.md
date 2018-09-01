@@ -1,4 +1,4 @@
-#Conference Track Management
+Conference Track Management
 The program plans the conference track for a day.  The program is developed using Java and Maven inside Eclipse IDE.  The design of program is depicted in an image
 
 ##Installing
