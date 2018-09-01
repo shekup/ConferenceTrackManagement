@@ -22,4 +22,13 @@ public class Event {
 		return "Event: " + "name-" + name + ", length-"+ length + ", start time-" + startTime; 
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	
 }

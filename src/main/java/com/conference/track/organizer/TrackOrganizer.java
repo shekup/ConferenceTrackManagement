@@ -7,6 +7,7 @@ import com.conference.track.domain.Event;
 import com.conference.track.domain.Session;
 import com.conference.track.domain.Talk;
 import com.conference.track.domain.Track;
+import com.conference.track.exception.InvalidTalkException;
 import com.conference.track.util.Constants;
 import com.conference.track.util.TimeUtil;
 
@@ -21,20 +22,24 @@ import com.conference.track.util.TimeUtil;
  */
 public class TrackOrganizer {
 	
-	private TalksOrganizer organizer;
+	TalksOrganizer organizer;
+	Track track;
+	Session morningSession;
+	Session eveningSession;
+	Map<String, Integer> talksMap;
+	List<Talk> talksList;
 	
 	public TrackOrganizer(TalksOrganizer organizer) {
 		this.organizer = organizer;
 	}
 	
-	public Track createTrack(Map<String, Integer> talksMap) throws Exception {
-		Track track = new Track();
+	public Track createTrack(Map<String, Integer> talksMap) throws InvalidTalkException {
+		track = new Track();
+		this.talksMap = talksMap;
 		
 		// Prepare Morning session
-		Session morningSession = track.getMorningSession();
-		List<Talk> talksList = organizer.organize(talksMap, morningSession.getLength());
-		morningSession.setTalksList(talksList);
-		track.setMorningSession(morningSession);
+		createMorningSession();
+		
 		
 		// Remove the talks selected for morning session from available list
 		for(Talk talk: talksList) {
@@ -43,22 +48,41 @@ public class TrackOrganizer {
 		}
 		
 		// Prepare Evening session
-		Session eveningSession = track.getEveningSession();
+		createEveningSession();
+		
+		// Prepare lunch
+		track.setLunch(createLunchEvent());
+		
+		// Prepare Networking
+		track.setNetworking(createNetworkingEvent(track.getEveningSession().getEndTime()));
+		
+		return track;
+	}
+	
+	private void createMorningSession() throws InvalidTalkException {
+		morningSession = track.getMorningSession();
+		talksList = organizer.organize(talksMap, morningSession.getLength());
+		morningSession.setTalksList(talksList);
+		track.setMorningSession(morningSession);
+	}
+	
+	private void createEveningSession() throws InvalidTalkException {
+		eveningSession = track.getEveningSession();
 		talksList = organizer.organize(talksMap, eveningSession.getLength());
 		eveningSession.setTalksList(talksList);
 		track.setEveningSession(eveningSession);
-		
-		// Prepare lunch
+	}
+	
+	Event createLunchEvent() {
 		Event lunch = new Event(Constants.EVENT_LUNCH_BREAK, Constants.EVENT_LUNCH_LENGTH);
 		lunch.setStartTime(Constants.EVENT_LUNCH_START_TIME);
-		track.setLunch(lunch);
-		
-		// Prepare Networking
+		return lunch;
+	}
+	
+	Event createNetworkingEvent(String eveSessionEndTime) {
 		Event networking = new Event(Constants.EVENT_NETWORKING, Constants.EVENT_NETWORKING_LENGTH);
-		networking.setStartTime(TimeUtil.getStartTimeForNetworking(track.getEveningSession().getEndTime()));
-		track.setNetworking(networking);
-		
-		return track;
+		networking.setStartTime(TimeUtil.getStartTimeForNetworking(eveSessionEndTime));
+		return networking;
 	}
 
 }
