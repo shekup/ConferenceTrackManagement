@@ -31,5 +31,8 @@ Issues
 1. The regular expression pattern to validate input line is copied from Internet and might fail
 2. No logger is attached and output comes on console
 
+More details: 
+http://shekup.blogspot.com/2018/09/conference-track-management.html
+
 
 
